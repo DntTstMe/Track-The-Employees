@@ -72,3 +72,39 @@ const handleMenuChoice = response => {
       connection.end();
   }
 };
+// Function to query the database and handle results
+const queryDatabase = async (query, params, callback) => {
+  try {
+    const [rows, fields] = await connection.promise().query(query, params);
+    displayResults(rows);
+    callback();
+  } catch (err) {
+    console.error('Database query error:', err);
+    callback();
+  }
+};
+
+// Function to display query results
+const displayResults = rows => {
+  // rows.forEach(row => {
+    console.table(rows);
+  // });
+};
+
+// Function to view all departments
+const viewDepartment = () => {
+  const query = 'SELECT * FROM department';
+  queryDatabase(query, [], startMenu);
+};
+
+// Function to view all jobs
+const viewJobs = () => {
+  const query = 'SELECT * FROM job';
+  queryDatabase(query, [], startMenu);
+};
+
+// Function to view all employees
+const viewEmployees = () => {
+  const query = 'SELECT e.id, e.first_name, e.last_name, j.title, j.salary, d.dept_name, e.manager_id FROM employee as e LEFT JOIN job as j ON e.job_id = j.id LEFT JOIN department as d ON j.department_id = d.id;';
+  queryDatabase(query, [], startMenu);
+};
