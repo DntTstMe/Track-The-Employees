@@ -21,6 +21,7 @@ connection.connect(err => {
   console.log("Welcome to the Dunder Mifflin employee tracker");
   startMenu();
 });
+
 // Function to display the main menu
 const startMenu = () => {
   inquirer.prompt({
@@ -72,6 +73,7 @@ const handleMenuChoice = response => {
       connection.end();
   }
 };
+
 // Function to query the database and handle results
 const queryDatabase = async (query, params, callback) => {
   try {
@@ -108,6 +110,7 @@ const viewEmployees = () => {
   const query = 'SELECT e.id, e.first_name, e.last_name, j.title, j.salary, d.dept_name, e.manager_id FROM employee as e LEFT JOIN job as j ON e.job_id = j.id LEFT JOIN department as d ON j.department_id = d.id;';
   queryDatabase(query, [], startMenu);
 };
+
 // Function to add a department
 const addDepartment = () => {
   inquirer.prompt([
