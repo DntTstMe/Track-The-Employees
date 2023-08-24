@@ -108,3 +108,97 @@ const viewEmployees = () => {
   const query = 'SELECT e.id, e.first_name, e.last_name, j.title, j.salary, d.dept_name, e.manager_id FROM employee as e LEFT JOIN job as j ON e.job_id = j.id LEFT JOIN department as d ON j.department_id = d.id;';
   queryDatabase(query, [], startMenu);
 };
+// Function to add a department
+const addDepartment = () => {
+  inquirer.prompt([
+    {
+      name: 'department',
+      type: 'input',
+      message: 'What is the department name?',
+    },
+  ])
+  .then(answer => {
+    const query = 'INSERT INTO department (dept_name) VALUES (?)';
+    queryDatabase(query, [answer.department], startMenu);
+    // console.log('Department Created!')
+  });
+};
+
+// Function to add a job
+const addJob = () => {
+  inquirer.prompt([
+    {
+      name: 'jobTitle',
+      type: 'input',
+      message: 'What is the job title?',
+    },
+    {
+      name: 'salary',
+      type: 'input',
+      message: 'What is the salary for this job?',
+    },
+    {
+      name: 'deptId',
+      type: 'input',
+      message: 'What is the department ID number?',
+    },
+  ])
+  .then(answer => {
+    const query = 'INSERT INTO job (title, salary, department_id) VALUES (?, ?, ?)';
+    queryDatabase(query, [answer.jobTitle, answer.salary, answer.deptId], startMenu);
+  });
+};
+
+// Function to add an employee
+const addEmployee = () => {
+  inquirer.prompt([
+    {
+      name: 'nameFirst',
+      type: 'input',
+      message: "What is the employee's first name?",
+    },
+    {
+      name: 'nameLast',
+      type: 'input',
+      message: "What is the employee's last name?",
+    },
+    {
+      name: 'jobId',
+      type: 'input',
+      message: "What is the employee's job id?",
+    },
+    {
+      name: 'managerId',
+      type: 'input',
+      message: 'What is the manager Id?',
+    },
+  ])
+  .then(answer => {
+    const query = 'INSERT INTO employee (first_name, last_name, job_id, manager_id) VALUES (?, ?, ?, ?)';
+    queryDatabase(query, [answer.nameFirst, answer.nameLast, answer.jobId, answer.managerId], startMenu);
+  });
+};
+
+// Function to update an employee's job
+const updateEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        name: 'id',
+        type: 'input',
+        message: 'Enter employee id',
+      },
+      {
+        name: 'jobId',
+        type: 'input',
+        message: 'Enter new job id',
+      },
+    ])
+    .then(answer => {
+      const query = 'UPDATE employee SET job_id=? WHERE id=?';
+      queryDatabase(query, [answer.jobId, answer.id], startMenu);
+    });
+};
+
+// Export the connection for use in other modules
+module.exports = connection;
